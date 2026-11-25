@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f8fb">
+<meta name="description" content="BNA–EMI bilingual knowledge base and term project learning modules.">
+<title>BNA–EMI Knowledge Base</title>
+<style>
+:root{
+  --bg:#f5f8fb;--surface:#ffffff;--surface-2:#edf4f8;--text:#203447;
+  --muted:#617789;--line:#dce6ed;--accent:#397b9f;--accent-soft:#e4f1f7;
+  --mint:#e7f4ef;--lav:#f0edfa;--sand:#fbf3e6;--shadow:0 12px 34px rgba(34,62,82,.07);
+  --header:rgba(255,255,255,.88);--sidebar:#f9fbfd;
+}
+[data-theme="dark"]{
+  --bg:#111b25;--surface:#182633;--surface-2:#213442;--text:#e7eff5;
+  --muted:#a7bac8;--line:#304656;--accent:#8cc8e4;--accent-soft:#243f50;
+  --mint:#203c38;--lav:#302d45;--sand:#403727;--shadow:0 12px 34px rgba(0,0,0,.2);
+  --header:rgba(24,38,51,.9);--sidebar:#15232e;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;transition:background .2s,color .2s}
+button{font:inherit}
+a{color:var(--accent)}
+.topbar{height:72px;position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:0 24px;background:var(--header);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.icon-btn{width:42px;height:42px;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);display:grid;place-items:center;cursor:pointer}
+.icon-btn:hover,.nav-item:hover{background:var(--accent-soft)}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#d9edf6,#dff2e9);display:grid;place-items:center;color:#315d76;font-weight:800;letter-spacing:-1px}
+.brand-name{font-weight:750;letter-spacing:-.02em;line-height:1.2}
+.brand-sub{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.top-spacer{flex:1}
+.top-actions{display:flex;align-items:center;gap:8px}
+.pill-btn{border:1px solid var(--line);border-radius:12px;padding:9px 13px;background:var(--surface);color:var(--text);font-weight:650;cursor:pointer}
+.pill-btn:hover{border-color:var(--accent)}
+.layout{display:flex;min-height:calc(100vh - 72px)}
+.sidebar{width:278px;flex:0 0 278px;background:var(--sidebar);border-right:1px solid var(--line);padding:22px 16px;position:sticky;top:72px;height:calc(100vh - 72px);overflow:auto;transition:width .22s,flex-basis .22s,padding .22s}
+.sidebar.collapsed{width:0;flex-basis:0;padding-left:0;padding-right:0;overflow:hidden;border:0}
+.nav-label{font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:750;padding:8px 12px 12px}
+.nav-item{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;padding:11px 12px;border:0;border-radius:13px;background:transparent;color:var(--text);cursor:pointer;margin:3px 0}
+.nav-item.active{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.nav-num{font-size:12px;font-weight:800;color:var(--muted);padding-top:2px;min-width:22px}
+.nav-copy{font-size:13px;line-height:1.35}
+.nav-copy small{display:block;color:var(--muted);font-size:11px;margin-top:4px;font-weight:450}
+.sidebar-note{margin:22px 8px 0;padding:14px;border:1px solid var(--line);border-radius:14px;color:var(--muted);font-size:12px}
+.main{min-width:0;flex:1;padding:38px clamp(20px,5vw,76px) 28px;max-width:1500px;margin:0 auto}
+.content-wrap{max-width:920px;margin:0 auto}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);font-weight:800;margin:0 0 12px}
+h1{font-size:clamp(32px,4.5vw,50px);line-height:1.12;letter-spacing:-.045em;margin:0 0 15px}
+.lead{font-size:18px;color:var(--muted);max-width:760px;margin:0 0 28px}
+.hero{padding:34px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(135deg,var(--surface),var(--surface-2));box-shadow:var(--shadow);margin-bottom:28px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tag{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700}
+.section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:20px 0 30px}
+.info-card,.content-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 4px 18px rgba(30,60,80,.035)}
+.info-card h3,.content-card h2{margin:0 0 9px;letter-spacing:-.02em}
+.info-card p,.content-card p{margin:8px 0;color:var(--muted)}
+.info-card .kicker{font-size:11px;color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.content-card{margin:18px 0}
+.content-card h2{font-size:23px}
+.content-card h3{font-size:17px;margin:20px 0 7px}
+.content-card ul,.content-card ol{padding-left:23px;margin:10px 0}
+.content-card li{padding:3px 0}
+.callout{padding:16px 18px;border-radius:14px;background:var(--mint);border:1px solid var(--line);margin:16px 0;color:var(--text)}
+.callout strong{color:var(--accent)}
+.term-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.term{padding:14px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2)}
+.term b{display:block;color:var(--accent);font-size:13px}
+.term span{font-size:13px;color:var(--muted)}
+.process{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.process-item{display:flex;gap:14px;align-items:flex-start;padding:15px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.process-item:before{counter-increment:step;content:counter(step,decimal-leading-zero);font-size:12px;font-weight:800;color:var(--accent);background:var(--accent-soft);padding:6px 8px;border-radius:8px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--accent);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.page-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:34px 0 20px;padding-top:22px;border-top:1px solid var(--line)}
+.page-btn{border:1px solid var(--line);border-radius:13px;padding:11px 15px;background:var(--surface);color:var(--text);cursor:pointer;font-weight:650}
+.page-btn:disabled{opacity:.38;cursor:not-allowed}
+.page-btn.primary{background:var(--accent);border-color:var(--accent);color:white}
+.top-link{background:transparent;border:0;color:var(--accent);font-weight:700;cursor:pointer;padding:10px}
+.footer{border-top:1px solid var(--line);margin-top:26px;padding:24px 0 8px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.footer strong{color:var(--text)}
+.mobile-scrim{display:none}
+.progress{height:4px;background:var(--surface-2);position:fixed;top:72px;left:0;right:0;z-index:29}
+.progress span{display:block;height:100%;width:14.28%;background:var(--accent);transition:width .25s}
+@media(max-width:800px){
+ .topbar{padding:0 14px;height:64px}.progress{top:64px}
+ .brand-sub{display:none}.brand-name{font-size:14px}
+ .layout{min-height:calc(100vh - 64px)}
+ .sidebar{position:fixed;z-index:40;top:64px;bottom:0;left:0;height:auto;width:min(82vw,310px);flex-basis:auto;box-shadow:var(--shadow);transform:translateX(0);transition:transform .22s}
+ .sidebar.collapsed{width:min(82vw,310px);flex-basis:auto;padding:22px 16px;transform:translateX(-105%);border-right:1px solid var(--line)}
+ .mobile-scrim.show{display:block;position:fixed;inset:64px 0 0;background:rgba(10,25,35,.35);z-index:35}
+ .main{padding:25px 16px 20px}.hero{padding:23px}.section-grid,.term-grid{grid-template-columns:1fr}
+ .top-actions{gap:5px}.pill-btn{padding:8px 9px;font-size:12px}
+}
+@media(min-width:801px){.mobile-scrim{display:none!important}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar" id="top">
+  <button class="icon-btn" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false" title="Menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+  <div class="brand">
+    <div class="brand-mark">BN</div>
+    <div><div class="brand-name">BNA–EMI Knowledge Base</div><div class="brand-sub">Term Project · Learning Modules</div></div>
+  </div>
+  <div class="top-spacer"></div>
+  <div class="top-actions">
+    <button class="pill-btn" id="langToggle" aria-label="Switch language">中文</button>
+    <button class="icon-btn" id="themeToggle" aria-label="Toggle light and dark theme" title="Toggle theme">
+      <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m12.3 12.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m12.3-12.3 1.42-1.42"/></svg>
+    </button>
+  </div>
+</header>
+<div class="progress"><span id="progressBar"></span></div>
+<div class="mobile-scrim" id="scrim"></div>
+<div class="layout">
+  <aside class="sidebar collapsed" id="sidebar" aria-label="Module navigation">
+    <div class="nav-label" id="navLabel">Modules</div>
+    <nav id="nav"></nav>
+    <div class="sidebar-note" id="sidebarNote">A structured learning path from problem analysis to product value.</div>
+  </aside>
+  <main class="main">
+    <div class="content-wrap" id="content" aria-live="polite"></div>
+    <div class="footer">
+      <div><strong>Architect: Prof. Shihmin Lo</strong><br><span id="copyright">© 2026 Prof. Shihmin Lo. All rights reserved.</span></div>
+      <div><strong>Version v1.0.0</strong><br>BNA–EMI · Term Project</div>
+    </div>
+  </main>
+</div>
+<script>
+const modules = [
+{
+ id:"intro", en:"Introduction & Terminology", zh:"課程介紹與專有名詞",
+ enLead:"A bilingual knowledge base for the BNA–EMI workshop and its term-project concepts.",
+ zhLead:"整理 BNA–EMI 工作坊與專題製作相關概念的雙語知識庫。",
+ enBody:`<div class="hero"><p class="eyebrow">BNA–EMI WORKSHOP · 25 NOVEMBER 2026</p><h1>From business analysis to a working product.</h1><p class="lead">This knowledge base connects problem investigation, product planning, application development, teamwork, and commercial value.</p><div class="hero-meta"><span class="tag">Business News Analysis</span><span class="tag">English as a Medium of Instruction</span><span class="tag">Term Project</span></div></div>
+ <div class="section-grid"><article class="info-card"><div class="kicker">BNA</div><h3>Business News Analysis</h3><p>Analysis of business-related news and information, organized into useful findings.</p></article><article class="info-card"><div class="kicker">EMI</div><h3>English as a Medium of Instruction</h3><p>English is used as the language of instruction in the learning context.</p></article></div>
+ <section class="content-card"><h2>Key terminology</h2><div class="term-grid">
+ <div class="term"><b>TP</b><span>Term Project</span></div><div class="term"><b>PRD</b><span>Product Requirements Document</span></div><div class="term"><b>MVP</b><span>Minimum Viable Product</span></div><div class="term"><b>WTP</b><span>Willingness to Pay</span></div><div class="term"><b>SaaS</b><span>Software as a Service</span></div><div class="term"><b>SPA</b><span>Single-Page Application</span></div><div class="term"><b>SVG</b><span>Scalable Vector Graphics</span></div></div></section>
+ <div class="callout"><strong>How to use this knowledge base:</strong> Use the module menu to move through the topics. Switch languages or themes at any time. Each module has previous/next navigation.</div>`,
+ zhBody:`<div class="hero"><p class="eyebrow">BNA–EMI 工作坊 · 2026 年 11 月 25 日</p><h1>從商業分析走向可運作的產品。</h1><p class="lead">本知識庫串連問題探究、產品規劃、應用程式開發、團隊協作與商業價值。</p><div class="hero-meta"><span class="tag">商業新聞分析</span><span class="tag">全英語授課</span><span class="tag">學期專題</span></div></div>
+ <div class="section-grid"><article class="info-card"><div class="kicker">BNA</div><h3>Business News Analysis</h3><p>商業新聞分析：整理商業相關新聞與資訊，並從中歸納有用的發現。</p></article><article class="info-card"><div class="kicker">EMI</div><h3>English as a Medium of Instruction</h3><p>以英語作為教學與學習活動的主要授課語言。</p></article></div>
+ <section class="content-card"><h2>重要專有名詞</h2><div class="term-grid">
+ <div class="term"><b>TP</b><span>Term Project／學期專題</span></div><div class="term"><b>PRD</b><span>Product Requirements Document／產品需求文件</span></div><div class="term"><b>MVP</b><span>Minimum Viable Product／最小可行產品</span></div><div class="term"><b>WTP</b><span>Willingness to Pay／願付價格</span></div><div class="term"><b>SaaS</b><span>Software as a Service／軟體即服務</span></div><div class="term"><b>SPA</b><span>Single-Page Application／單頁式應用程式</span></div><div class="term"><b>SVG</b><span>Scalable Vector Graphics／可縮放向量圖形</span></div></div></section>
+ <div class="callout"><strong>使用方式：</strong>透過左側模組選單切換主題，可隨時切換語言與明暗主題。每個模組底部都有上一頁／下一頁導覽。</div>`
+},
+{
+ id:"needs",en:"Business Needs Analysis",zh:"商業需求分析",
+ enLead:"Connect the needs of users with what a product can provide.",
+ zhLead:"將使用者需求與產品能夠提供的價值連結起來。",
+ enBody:`<section class="content-card"><h2>Demand and supply</h2><p>Product thinking begins by considering both sides of a potential relationship.</p><div class="section-grid"><div class="info-card"><div class="kicker">Demand</div><h3>What do users need?</h3><ul><li>Identify customer or user needs.</li><li>Understand the problem behind the request.</li><li>Investigate whether demand exists.</li></ul></div><div class="info-card"><div class="kicker">Supply</div><h3>What can the product provide?</h3><ul><li>Identify what the product can offer.</li><li>Determine feasible functions.</li><li>Connect functions to user needs.</li></ul></div></div></section>
+ <section class="content-card"><h2>From need to product concept</h2><div class="process"><div class="process-item">Recognize a potential need or problem.</div><div class="process-item">Investigate the demand and context.</div><div class="process-item">Identify what a product could supply.</div><div class="process-item">Translate the relationship into product requirements.</div></div></section>
+ <div class="callout"><strong>Key question:</strong> Is the proposed product responding to a real need, and can it provide a useful answer?</div>`,
+ zhBody:`<section class="content-card"><h2>需求與供給</h2><p>產品規劃的起點，是同時思考潛在關係中的需求端與供給端。</p><div class="section-grid"><div class="info-card"><div class="kicker">Demand／需求</div><h3>使用者需要什麼？</h3><ul><li>找出顧客或使用者的需求。</li><li>理解需求背後真正的問題。</li><li>調查市場上是否存在需求。</li></ul></div><div class="info-card"><div class="kicker">Supply／供給</div><h3>產品能提供什麼？</h3><ul><li>確認產品可以提供的內容。</li><li>判斷哪些功能可行。</li><li>讓產品功能對應使用者需求。</li></ul></div></div></section>
+ <section class="content-card"><h2>從需求走向產品概念</h2><div class="process"><div class="process-item">辨識潛在需求或問題。</div><div class="process-item">調查需求與相關情境。</div><div class="process-item">確認產品可能提供的解決方式。</div><div class="process-item">將需求與供給關係轉化為產品需求。</div></div></section>
+ <div class="callout"><strong>核心問題：</strong>提出的產品是否回應真實需求？它是否能提供有用的解決方式？</div>`
+},
+{
+ id:"analysis",en:"Analytical Thinking",zh:"分析思維與問題探究",
+ enLead:"Break a complex problem into parts, investigate with evidence, then recombine the findings.",
+ zhLead:"將複雜問題拆解、以證據進行探究，再重新整合各部分的發現。",
+ enBody:`<section class="content-card"><h2>Problem-analysis process</h2><div class="process"><div class="process-item"><div><b>Separate</b><br>Break the overall problem into smaller parts or components.</div></div><div class="process-item"><div><b>Identify</b><br>Clarify the problem and the underlying demand.</div></div><div class="process-item"><div><b>Question</b><br>Formulate the questions that need to be answered.</div></div><div class="process-item"><div><b>Investigate</b><br>Examine each question and collect relevant information.</div></div><div class="process-item"><div><b>Support with evidence</b><br>Use evidence and examples to support the investigation.</div></div><div class="process-item"><div><b>Recombine</b><br>Bring the components and findings together into an overall understanding or solution.</div></div></div></section>
+ <section class="content-card"><h2>Evidence-based investigation</h2><ul><li>Collect relevant information.</li><li>Use examples to clarify findings.</li><li>Check whether the evidence supports the proposed interpretation.</li><li>Return to the original problem to assess whether it has been addressed.</li></ul></section>
+ <div class="callout"><strong>Core principle:</strong> Do not jump straight to a solution. First understand the problem, investigate the demand, and support conclusions with evidence.</div>`,
+ zhBody:`<section class="content-card"><h2>問題分析流程</h2><div class="process"><div class="process-item"><div><b>拆解（Separate）</b><br>將整體問題拆成較小的部分或組成要素。</div></div><div class="process-item"><div><b>辨識（Identify）</b><br>釐清問題本身與背後的需求。</div></div><div class="process-item"><div><b>提問（Question）</b><br>形成需要進一步回答的問題。</div></div><div class="process-item"><div><b>探究（Investigate）</b><br>逐一檢視問題並蒐集相關資訊。</div></div><div class="process-item"><div><b>證據支持（Evidence）</b><br>使用證據與實例支持分析。</div></div><div class="process-item"><div><b>重新整合（Recombine）</b><br>將各部分與研究結果整合成整體理解或解決方案。</div></div></div></section>
+ <section class="content-card"><h2>以證據為基礎的探究</h2><ul><li>蒐集相關資訊。</li><li>運用實例協助說明發現。</li><li>檢查證據是否支持提出的解釋。</li><li>回到原始問題，確認是否已獲得回應。</li></ul></section>
+ <div class="callout"><strong>核心原則：</strong>不要直接跳到解決方案。先理解問題、調查需求，再用證據支持結論。</div>`
+},
+{
+ id:"product",en:"Product Development · PRD & MVP",zh:"產品開發：PRD 與 MVP",
+ enLead:"Translate needs into requirements, then begin with a minimum viable product.",
+ zhLead:"將需求轉化為產品規格，再從最小可行產品開始驗證。",
+ enBody:`<section class="content-card"><h2>PRD · Product Requirements Document</h2><p>A PRD is associated in the workshop notes with product requirements and function verification.</p><h3>A practical requirements sequence</h3><div class="process"><div class="process-item">Identify intended users and their needs.</div><div class="process-item">Define product requirements.</div><div class="process-item">Specify the functions the product should provide.</div><div class="process-item">Verify that the functions meet the requirements.</div></div><p class="small">The workshop notes do not specify a complete PRD template or mandatory sections.</p></section>
+ <section class="content-card"><h2>MVP · Minimum Viable Product</h2><p>An MVP is the minimum viable version of a product that can demonstrate its essential value.</p><ul><li>Start with essential functions.</li><li>Avoid adding features before their value is understood.</li><li>Evaluate the product with users.</li><li>Use feedback to guide improvement.</li></ul></section>
+ <div class="callout"><strong>Relationship:</strong> PRD helps describe what the product should do; an MVP is an early product version used to demonstrate and evaluate essential value.</div>`,
+ zhBody:`<section class="content-card"><h2>PRD · Product Requirements Document（產品需求文件）</h2><p>工作坊筆記將 PRD 與產品需求及功能驗證連結在一起。</p><h3>實務上的需求規劃順序</h3><div class="process"><div class="process-item">辨識目標使用者及其需求。</div><div class="process-item">定義產品需求。</div><div class="process-item">明確列出產品應提供的功能。</div><div class="process-item">驗證功能是否符合需求。</div></div><p class="small">原始工作坊筆記沒有列出完整 PRD 範本或必備章節。</p></section>
+ <section class="content-card"><h2>MVP · Minimum Viable Product（最小可行產品）</h2><p>MVP 是具備最低限度可行功能、足以展示核心價值的產品版本。</p><ul><li>先從必要功能開始。</li><li>在尚未理解功能價值前，避免加入過多功能。</li><li>讓使用者實際評估產品。</li><li>運用回饋作為後續改善依據。</li></ul></section>
+ <div class="callout"><strong>兩者關係：</strong>PRD 用來描述產品應該做到什麼；MVP 則是用來展示與評估核心價值的早期產品版本。</div>`
+},
+{
+ id:"market",en:"Commercialization & Market Value",zh:"商業化與市場價值",
+ enLead:"Consider producers, the market, consumers, commercial value, and willingness to pay.",
+ zhLead:"從生產者、市場、消費者、商業價值與願付價格思考產品的商業潛力。",
+ enBody:`<section class="content-card"><h2>Producers · Market · Consumers</h2><div class="section-grid"><div class="info-card"><div class="kicker">Supply side</div><h3>Producers</h3><p>The people or organizations providing the product or service.</p></div><div class="info-card"><div class="kicker">Demand side</div><h3>Consumers</h3><p>The people who may use or purchase the product.</p></div></div><p>The market connects the product offering with potential consumers.</p></section>
+ <section class="content-card"><h2>WTP · Willingness to Pay</h2><p>WTP refers to how much a consumer is willing to pay for a product or service.</p><ul><li>Useful functions do not automatically prove commercial value.</li><li>Consumer appreciation does not necessarily mean willingness to pay.</li><li>Consider whether the value received is meaningful enough for consumers to pay for.</li></ul></section>
+ <section class="content-card"><h2>SaaS · Software as a Service</h2><p>The notes mention a web-based service and SaaS as a possible service/business model for the BNA Agent.</p><div class="callout">SaaS is recorded as a possible direction in the notes, not as a confirmed final business decision.</div></section>`,
+ zhBody:`<section class="content-card"><h2>生產者 · 市場 · 消費者</h2><div class="section-grid"><div class="info-card"><div class="kicker">供給端</div><h3>生產者（Producers）</h3><p>提供產品或服務的個人或組織。</p></div><div class="info-card"><div class="kicker">需求端</div><h3>消費者（Consumers）</h3><p>可能使用或購買產品的人。</p></div></div><p>市場將產品供給與潛在消費者連結起來。</p></section>
+ <section class="content-card"><h2>WTP · Willingness to Pay（願付價格）</h2><p>WTP 指消費者願意為某項產品或服務支付的金額。</p><ul><li>具備實用功能，不代表一定具有商業價值。</li><li>消費者喜歡產品，不一定代表願意付費。</li><li>應思考消費者是否認為產品提供的價值值得付費。</li></ul></section>
+ <section class="content-card"><h2>SaaS · Software as a Service（軟體即服務）</h2><p>筆記提到網頁式服務與 SaaS，作為 BNA Agent 可能採用的服務／商業模式。</p><div class="callout">SaaS 在筆記中屬於可能方向，並非已確認的最終商業決策。</div></section>`
+},
+{
+ id:"spa",en:"SPA & Team Collaboration",zh:"SPA 與團隊協作",
+ enLead:"Build a single-page application, make it responsive, and coordinate work through a shared session.",
+ zhLead:"建立單頁式應用程式、支援不同裝置，並透過共用工作階段協調團隊工作。",
+ enBody:`<section class="content-card"><h2>SPA · Single-Page Application</h2><p>The notes mention a single-page app prepared as an HTML file, followed by deployment and a deployment link.</p><div class="process"><div class="process-item">Create the single-page application.</div><div class="process-item">Prepare the HTML-based app and interface.</div><div class="process-item">Organize team responsibilities.</div><div class="process-item">Deploy the application.</div><div class="process-item">Share the deployment link and test access.</div></div></section>
+ <section class="content-card"><h2>Responsive design & visual formats</h2><ul><li>Consider mobile phones, tablets, notebooks / PCs, and different display orientations.</li><li>PNG and JPEG are raster image formats.</li><li>SVG is a scalable vector-graphics format.</li><li>Graphs and diagrams can communicate information visually.</li><li>Keep the interface simple and direct.</li></ul></section>
+ <section class="content-card"><h2>Shared AI session & handoff.md</h2><p>Team members take turns in one shared AI chat session. The handoff file helps pass context or work between participants.</p><div class="process"><div class="process-item">Work in the shared AI conversation.</div><div class="process-item">Record progress, decisions, and next steps.</div><div class="process-item">Maintain handoff information in <code>handoff.md</code>.</div><div class="process-item">The next participant uses the handoff context to continue.</div></div><p class="small">The original notes do not define a formal handoff template or access-control procedure.</p></section>`,
+ zhBody:`<section class="content-card"><h2>SPA · Single-Page Application（單頁式應用程式）</h2><p>筆記提到以 HTML 檔案製作單頁式應用程式，接著進行部署並分享部署連結。</p><div class="process"><div class="process-item">建立單頁式應用程式。</div><div class="process-item">準備 HTML 網頁與介面。</div><div class="process-item">安排團隊分工。</div><div class="process-item">部署應用程式。</div><div class="process-item">分享部署連結並測試是否能正常存取。</div></div></section>
+ <section class="content-card"><h2>響應式設計與視覺格式</h2><ul><li>考量手機、平板、筆記型電腦／桌上型電腦及不同螢幕方向。</li><li>PNG 與 JPEG 屬於點陣圖格式。</li><li>SVG 是可縮放的向量圖形格式。</li><li>圖表與示意圖能以視覺方式傳達資訊。</li><li>介面應保持簡潔、直接。</li></ul></section>
+ <section class="content-card"><h2>共用 AI 工作階段與 handoff.md</h2><p>團隊成員輪流使用同一個共用 AI 對話工作階段，並透過 handoff 檔案在成員之間傳遞工作脈絡。</p><div class="process"><div class="process-item">在共用 AI 對話中工作。</div><div class="process-item">記錄進度、決策與下一步。</div><div class="process-item">將交接資訊維護在 <code>handoff.md</code>。</div><div class="process-item">下一位成員依照交接內容接續工作。</div></div><p class="small">原始筆記未定義正式的交接範本或存取權限流程。</p></section>`
+},
+{
+ id:"ai",en:"AI & Knowledge Management",zh:"AI 與知識管理",
+ enLead:"Turn text, recordings, video, and images into structured knowledge—then review the results critically.",
+ zhLead:"將文字、錄音、影片與圖片轉化為結構化知識，並以批判思考檢視成果。",
+ enBody:`<section class="content-card"><h2>Input materials</h2><div class="term-grid"><div class="term"><b>Text</b><span>In-class notes and text-taking</span></div><div class="term"><b>Audio</b><span>Voice recordings</span></div><div class="term"><b>Video</b><span>Video recordings</span></div><div class="term"><b>Images</b><span>Images and pictures</span></div></div></section>
+ <section class="content-card"><h2>AI processing workflow</h2><div class="process"><div class="process-item">Collect source materials.</div><div class="process-item">Analyze the materials with AI.</div><div class="process-item">Identify important points and generate a summary.</div><div class="process-item">Organize the content into a clear structure.</div><div class="process-item">Create documents for later use.</div></div></section>
+ <section class="content-card"><h2>Output formats</h2><ul><li><code>.txt</code> — plain text.</li><li><code>.md</code> — Markdown.</li><li>Documents — structured written outputs.</li></ul><p>Markdown supports headings, lists, links, and lightweight organization.</p></section>
+ <section class="content-card"><h2>Critical thinking</h2><p>AI-generated summaries and documents should be reviewed rather than accepted automatically.</p><ul><li>Check the source material.</li><li>Verify important claims.</li><li>Notice missing information or context.</li><li>Form independent conclusions.</li></ul></section>`,
+ zhBody:`<section class="content-card"><h2>輸入資料</h2><div class="term-grid"><div class="term"><b>文字（Text）</b><span>課堂筆記與文字紀錄</span></div><div class="term"><b>音訊（Audio）</b><span>語音錄音</span></div><div class="term"><b>影片（Video）</b><span>影片錄製內容</span></div><div class="term"><b>圖片（Images）</b><span>影像與照片</span></div></div></section>
+ <section class="content-card"><h2>AI 處理流程</h2><div class="process"><div class="process-item">蒐集原始資料。</div><div class="process-item">使用 AI 分析資料。</div><div class="process-item">找出重點並產生摘要。</div><div class="process-item">將內容整理成清楚的架構。</div><div class="process-item">產出可供後續使用的文件。</div></div></section>
+ <section class="content-card"><h2>輸出格式</h2><ul><li><code>.txt</code> — 純文字。</li><li><code>.md</code> — Markdown 格式。</li><li>Documents — 結構化文件。</li></ul><p>Markdown 支援標題、清單、連結等輕量化內容組織方式。</p></section>
+ <section class="content-card"><h2>批判思考（Critical Thinking）</h2><p>AI 產生的摘要與文件應該經過檢查，而不是直接全盤接受。</p><ul><li>檢查原始資料。</li><li>查證重要主張。</li><li>留意遺漏的資訊或脈絡。</li><li>形成自己的結論。</li></ul></section>`
+},
+{
+ id:"principles",en:"Thinking Principles & Integrated Workflow",zh:"思考原則與整合流程",
+ enLead:"Keep the work systematic, structured, process-oriented, effective, and evidence-based.",
+ zhLead:"讓整體工作具備系統性、結構性、流程導向、有效性與證據基礎。",
+ enBody:`<section class="content-card"><h2>Systematic · Structured · Process-oriented</h2><div class="section-grid"><div class="info-card"><div class="kicker">Systematic</div><h3>Logical system</h3><p>Arrange information according to a clear logic.</p></div><div class="info-card"><div class="kicker">Structured</div><h3>Clear organization</h3><p>Organize ideas into levels, groups, or categories.</p></div><div class="info-card"><div class="kicker">Process-oriented</div><h3>Visible progression</h3><p>Show relationships and the progression between ideas.</p></div><div class="info-card"><div class="kicker">Evidence-based</div><h3>Supported findings</h3><p>Use evidence and examples to support investigation.</p></div></div></section>
+ <section class="content-card"><h2>Effective vs. efficient</h2><div class="section-grid"><div class="info-card"><div class="kicker">Effective</div><h3>Reach the goal</h3><p>Achieve the intended goal or purpose.</p></div><div class="info-card"><div class="kicker">Efficient</div><h3>Output in relation to input</h3><p>Consider the relationship between output and input.</p></div></div><div class="callout">The handwritten × indicates that effectiveness is emphasized over efficiency in this particular comparison. It does not mean efficiency is universally unimportant.</div></section>
+ <section class="content-card"><h2>Integrated workflow</h2><div class="process"><div class="process-item">Identify a need and understand the problem.</div><div class="process-item">Analyze the problem and formulate questions.</div><div class="process-item">Investigate with evidence.</div><div class="process-item">Plan requirements through a PRD.</div><div class="process-item">Build an MVP.</div><div class="process-item">Develop the SPA and interface.</div><div class="process-item">Collaborate through the shared AI session and handoff.md.</div><div class="process-item">Deploy, test, and share the application.</div><div class="process-item">Evaluate market potential and WTP.</div><div class="process-item">Maintain knowledge and verify AI-generated content.</div></div></section>
+ <section class="content-card"><h2>Items to verify in future revisions</h2><ul><li>Detailed PRD contents and required sections.</li><li>Specific BNA Agent functions and verification criteria.</li><li>MVP scope and evaluation approach.</li><li>Final SPA implementation and deployment platform.</li><li>Detailed handoff.md format and team procedure.</li><li>Whether SaaS is selected or remains a possible model.</li></ul></section>`,
+ zhBody:`<section class="content-card"><h2>系統性 · 結構性 · 流程導向</h2><div class="section-grid"><div class="info-card"><div class="kicker">Systematic</div><h3>具備邏輯系統</h3><p>依照清楚的邏輯安排資訊。</p></div><div class="info-card"><div class="kicker">Structured</div><h3>清楚組織</h3><p>將想法整理成不同層級、群組或類別。</p></div><div class="info-card"><div class="kicker">Process-oriented</div><h3>呈現進展</h3><p>呈現想法之間的關係與推進順序。</p></div><div class="info-card"><div class="kicker">Evidence-based</div><h3>有證據支持</h3><p>使用證據與實例支持探究結果。</p></div></div></section>
+ <section class="content-card"><h2>Effective vs. Efficient（有效 vs. 效率）</h2><div class="section-grid"><div class="info-card"><div class="kicker">Effective</div><h3>達成目標</h3><p>成功達到預期目標或目的。</p></div><div class="info-card"><div class="kicker">Efficient</div><h3>投入與產出的關係</h3><p>考量產出相對於投入的關係。</p></div></div><div class="callout">手寫的 × 表示在這次比較中，筆記較強調有效性，而非效率。這不代表效率在所有情況下都不重要。</div></section>
+ <section class="content-card"><h2>整合工作流程</h2><div class="process"><div class="process-item">辨識需求並理解問題。</div><div class="process-item">分析問題並形成問題清單。</div><div class="process-item">以證據進行探究。</div><div class="process-item">透過 PRD 規劃需求。</div><div class="process-item">建立 MVP。</div><div class="process-item">開發 SPA 與介面。</div><div class="process-item">透過共用 AI 工作階段與 handoff.md 協作。</div><div class="process-item">部署、測試並分享應用程式。</div><div class="process-item">評估市場潛力與 WTP。</div><div class="process-item">維護知識內容並查證 AI 產出。</div></div></section>
+ <section class="content-card"><h2>未來版本仍待確認的項目</h2><ul><li>PRD 的詳細內容與必要章節。</li><li>BNA Agent 的具體功能與驗證標準。</li><li>MVP 範圍與評估方式。</li><li>SPA 最終實作與部署平台。</li><li>handoff.md 的詳細格式與團隊流程。</li><li>SaaS 是已選定模式，或仍是可能方向。</li></ul></section>`
+}
+];
+
+let current=0, language="en", sidebarOpen=false;
+const $=s=>document.querySelector(s);
+function renderNav(){
+  const nav=$("#nav"); nav.innerHTML="";
+  modules.forEach((m,i)=>{
+    const b=document.createElement("button"); b.className="nav-item"+(i===current?" active":"");
+    b.innerHTML=`<span class="nav-num">${String(i+1).padStart(2,"0")}</span><span class="nav-copy">${language==="en"?m.en:m.zh}<small>${language==="en"?"Module":"模組"} ${String(i+1).padStart(2,"0")}</small></span>`;
+    b.addEventListener("click",()=>{go(i);closeSidebar()}); nav.appendChild(b);
+  });
+  $("#navLabel").textContent=language==="en"?"Modules":"課程模組";
+  $("#sidebarNote").textContent=language==="en"?"A structured learning path from problem analysis to product value.":"從問題分析到產品價值的系統化學習路徑。";
+}
+function render(){
+  const m=modules[current], en=language==="en";
+  const title=en?m.en:m.zh, lead=en?m.enLead:m.zhLead;
+  $("#content").innerHTML=`<p class="eyebrow">${en?"MODULE":"模組"} ${String(current+1).padStart(2,"0")} / ${String(modules.length).padStart(2,"0")}</p><h1>${title}</h1><p class="lead">${lead}</p>${en?m.enBody:m.zhBody}
+  <div class="page-controls">
+    <button class="page-btn" id="prev" ${current===0?"disabled":""}>← ${en?"Previous page":"上一頁"}</button>
+    <button class="top-link" id="toTop">↑ ${en?"Return to the top":"回到頁首"}</button>
+    <button class="page-btn primary" id="next" ${current===modules.length-1?"disabled":""}>${en?"Next page":"下一頁"} →</button>
+  </div>`;
+  $("#prev").addEventListener("click",()=>go(current-1));
+  $("#next").addEventListener("click",()=>go(current+1));
+  $("#toTop").addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
+  $("#langToggle").textContent=en?"中文":"EN";
+  $("#progressBar").style.width=((current+1)/modules.length*100)+"%";
+  document.documentElement.lang=en?"en":"zh-Hant";
+  renderNav();
+}
+function go(i){if(i<0||i>=modules.length)return;current=i;render();window.scrollTo({top:0,behavior:"smooth"});}
+function closeSidebar(){sidebarOpen=false;$("#sidebar").classList.add("collapsed");$("#scrim").classList.remove("show");$("#menuToggle").setAttribute("aria-expanded","false");}
+function toggleSidebar(){
+  sidebarOpen=!sidebarOpen;
+  const mobile=window.matchMedia("(max-width:800px)").matches;
+  if(sidebarOpen){$("#sidebar").classList.remove("collapsed");if(mobile)$("#scrim").classList.add("show");}
+  else closeSidebar();
+  $("#menuToggle").setAttribute("aria-expanded",String(sidebarOpen));
+}
+$("#menuToggle").addEventListener("click",toggleSidebar);
+$("#scrim").addEventListener("click",closeSidebar);
+$("#langToggle").addEventListener("click",()=>{language=language==="en"?"zh":"en";render();});
+$("#themeToggle").addEventListener("click",()=>{
+ const dark=document.documentElement.dataset.theme!=="dark";
+ document.documentElement.dataset.theme=dark?"dark":"light";
+ $("#themeIcon").innerHTML=dark?'<path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.7 8.7 0 1 0 20.5 14.2Z"/>':'<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m12.3 12.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m12.3-12.3 1.42-1.42"/>';
+});
+window.addEventListener("resize",()=>{if(window.innerWidth>800){$("#scrim").classList.remove("show");}});
+render();
+</script>
+</body>
+</html>
